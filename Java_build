@@ -53,9 +53,6 @@ environment {
 
                 Error message:
                 ${e.getMessage()}
-
-                Stack Trace:
-                "${e.getStackTrace().join(\'\\n\')}"
                 """,
                 subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
                 to: EMAIL_TO
