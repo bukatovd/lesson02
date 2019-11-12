@@ -46,6 +46,19 @@ environment {
             dir ('myproject/target') {
             archive '*.jar'
             archive '*.md5'
+
+            emailext attachLog: true, compressLog: true,
+                body: """
+                Build: ${env.BUILD_URL}
+
+                Error message:
+                ${e.getMessage()}
+
+                Stack Trace:
+                ${e.getStackTrace().join(\'\\n\')}""",
+                subject: '${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed',
+                to: EMAIL_TO
+                
             cleanWs()
             echo 'Job succeeded!'
             }
