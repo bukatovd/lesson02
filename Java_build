@@ -51,7 +51,7 @@ environment {
                 body: """
                 Build: $BUILD_URL
                 """,
-                subject: 'Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed',
+                subject: "${status}: Job ${env.JOB_NAME} ([${env.BUILD_NUMBER})",
                 to: EMAIL_TO
 
             cleanWs()
