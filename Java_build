@@ -37,54 +37,31 @@ pipeline {
 
     post {
         always {
-            echo 'I have finished and deleting workspace'
+            echo 'I have finished.'
         }
         success {
-            echo 'Job succeeeded!'
             dir ('myproject/target') {
             archive '*.jar'
             archive '*.md5'
-            mail subject: "${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed",
-                body: """
-                    Build: ${env.BUILD_URL}
-
-                    Error message:
-                    ${e.getMessage()}
-
-                    Stack Trace:
-                    ${e.getStackTrace().join('\n')}
-                """,
-            to: 'bukatovd@gmail.com'            
             cleanWs()
+            echo 'Job succeeeded!'
             }
         }
         unstable {
+            mail bcc: '',
+                body: '''
+                Build: ${env.BUILD_URL}
+
+                Error message: ${e.getMessage()}
+
+                Stack Trace:
+                ${e.getStackTrace().join(\'\\n\')}''',
+                subject: '"${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed"',
+                to: 'bukatovd@gmail.com'
             echo 'I am unstable :/'
-            mail subject: "${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed",
-                body: """
-                    Build: ${env.BUILD_URL}
-
-                    Error message:
-                    ${e.getMessage()}
-
-                    Stack Trace:
-                    ${e.getStackTrace().join('\n')}
-                """,
-            to: 'bukatovd@gmail.com'
         }
         failure {
             echo 'I failed :('
-            mail subject: "${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed",
-                body: """
-                    Build: ${env.BUILD_URL}
-
-                    Error message:
-                    ${e.getMessage()}
-
-                    Stack Trace:
-                    ${e.getStackTrace().join('\n')}
-                """,
-            to: 'bukatovd@gmail.com'
         }
         changed {
             echo 'Things were different before...'
