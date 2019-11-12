@@ -41,14 +41,11 @@ environment {
         always {
             emailext attachLog: true, compressLog: true,
                 body: '''
-                Build: env.BUILD_URL
-
+                Build: $BUILD_URL
                 Error message:
-                e.getMessage()
-
-                Stack Trace:
-                e.getStackTrace().join(\'\\n\')''',
-                subject: ' env.JOB_NAME # env.BUILD_NUMBER - Failed',
+                ${currentBuild.result}
+                ${e.getMessage()}''',
+                subject: ' $JOB_NAME # $BUILD_NUMBER - Failed',
                 to: EMAIL_TO
 
             cleanWs()
