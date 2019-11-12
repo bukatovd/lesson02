@@ -43,9 +43,10 @@ environment {
                 body: '''
                 Build: $BUILD_URL
                 Error message:
-                ${currentBuild.result}
-                ${e.getMessage()}''',
-                subject: ' $JOB_NAME # $BUILD_NUMBER - Failed',
+                '${currentBuild.result}'
+                '${e.getMessage()}'
+                ''',
+                subject: "Job '${env.JOB_NAME} ${env.BUILD_NUMBER}' - Failed",
                 to: EMAIL_TO
 
             cleanWs()
