@@ -46,28 +46,28 @@ environment {
             archive '*.jar'
             archive '*.md5'
             }
-            emailext
+            emailext (
               attachLog: true, compressLog: true,
               body: "Build: $BUILD_URL",
               subject: 'Job $JOB_NAME # $BUILD_NUMBER - Job succeeded',
-              to: EMAIL_TO
+              to: EMAIL_TO)
             cleanWs()
             echo 'Job succeeded!'
         }
         unstable {
-          emailext
+          emailext (
             attachLog: true, compressLog: true,
             body: "Build: $BUILD_URL",
             subject: 'Job $JOB_NAME # $BUILD_NUMBER - I am unstable',
-            to: EMAIL_TO
+            to: EMAIL_TO)
             echo 'I am unstable :/'
         }
         failure {
-          emailext
+          emailext (
             attachLog: true, compressLog: true,
             body: "Build: $BUILD_URL",
             subject: 'Job $JOB_NAME # $BUILD_NUMBER - I failed',
-            to: EMAIL_TO
+            to: EMAIL_TO)
           echo 'I failed :('
         }
         changed {
