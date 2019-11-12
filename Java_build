@@ -38,7 +38,7 @@ pipeline {
     post {
         always {
             emailext body: 'test Pipeline', subject: 'test Jenkins',
-                to: 'bukatovd@gmail.com'
+                to: '1300777@tut.by'
             cleanWs()
         }
         success {
