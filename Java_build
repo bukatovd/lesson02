@@ -47,9 +47,7 @@ environment {
             ${e.getMessage()}""",
             subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
             to: EMAIL_TO
-
             echo 'Things were different before...'
-            
             cleanWs()
         }
         success {
@@ -61,16 +59,13 @@ environment {
             }
         }
         unstable {
-
             echo 'I am unstable :/'
         }
         failure {
-
             echo 'I failed :('
         }
         changed {
             echo 'Things were different before...'
-
         }
     }
 }
