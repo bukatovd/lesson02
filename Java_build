@@ -37,16 +37,6 @@ pipeline {
 
     post {
         always {
-            mail bcc: '',
-              body: '''
-              Build: ${env.BUILD_URL}
-
-              Error message: ${e.getMessage()}
-
-              Stack Trace:
-              ${e.getStackTrace().join(\'\\n\')}''',
-              subject: '"${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed"',
-              to: 'bukatovd@gmail.com'
             echo 'I have finished.'
             cleanWs()
         }
