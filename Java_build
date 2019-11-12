@@ -47,7 +47,6 @@ pipeline {
                 ${e.getStackTrace().join(\'\\n\')}''',
                 compressLog: true, subject: '${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed',
                 to: 'bukatovd@gmail.com'
-            throw err    
             cleanWs()
         }
         success {
