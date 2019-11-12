@@ -49,12 +49,9 @@ environment {
 
             emailext attachLog: true, compressLog: true,
                 body: """
-                Build: ${env.BUILD_URL}
-
-                Error message:
-                ${e.getMessage()}
+                Build: $BUILD_URL
                 """,
-                subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
+                subject: 'Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed',
                 to: EMAIL_TO
 
             cleanWs()
