@@ -39,7 +39,6 @@ environment {
 
     post {
         always {
-            cleanWs()
             emailext attachLog: true, compressLog: true,
               body: """
               Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}
