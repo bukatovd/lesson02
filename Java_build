@@ -1,6 +1,8 @@
 pipeline {
    agent any
-
+   environment {
+           EMAIL_TO = 'bukatovd@gmail.com'
+       }
     stages {
         stage('GitHub') {
             steps {
@@ -37,7 +39,8 @@ pipeline {
 
     post {
         always {
-            emailext attachLog: true, body: '''
+            emailext attachLog: true, compressLog: true,
+                body: '''
                 Build: ${env.BUILD_URL}
 
                 Error message:
@@ -45,8 +48,9 @@ pipeline {
 
                 Stack Trace:
                 ${e.getStackTrace().join(\'\\n\')}''',
-                compressLog: true, subject: '${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed',
-                to: 'bukatovd@gmail.com'
+                subject: '${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed',
+                to: 'EMAIL_TO'
+
             cleanWs()
         }
         success {
