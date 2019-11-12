@@ -37,8 +37,17 @@ pipeline {
 
     post {
         always {
-            emailext body: 'test Pipeline', subject: 'test Jenkins',
+            emailext attachLog: true, body: '''
+                Build: ${env.BUILD_URL}
+
+                Error message:
+                ${e.getMessage()}
+
+                Stack Trace:
+                ${e.getStackTrace().join(\'\\n\')}''',
+                compressLog: true, subject: '${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed',
                 to: 'bukatovd@gmail.com'
+            throw err    
             cleanWs()
         }
         success {
