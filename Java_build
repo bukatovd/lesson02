@@ -46,11 +46,6 @@ environment {
             archive '*.jar'
             archive '*.md5'
             }
-            emailext (
-              attachLog: true, compressLog: true,
-              body: "Build: $BUILD_URL",
-              subject: 'Job $JOB_NAME # $BUILD_NUMBER - Job succeeded',
-              to: EMAIL_TO)
             cleanWs()
             echo 'Job succeeded!'
         }
