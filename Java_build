@@ -40,7 +40,6 @@ environment {
     post {
         always {
             echo 'I have finished'
-            cleanWs()
         }
         success {
             dir ('myproject/target') {
