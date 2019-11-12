@@ -45,25 +45,30 @@ environment {
             dir ('myproject/target') {
             archive '*.jar'
             archive '*.md5'
-
-            emailext (
+            }
+            emailext
               attachLog: true, compressLog: true,
-              body: """
-              Build: $BUILD_URL
-              """,
-              subject: 'Job $JOB_NAME # $BUILD_NUMBER - ${status}',
-              to: EMAIL_TO)
+              body: "Build: $BUILD_URL",
+              subject: 'Job $JOB_NAME # $BUILD_NUMBER - Job succeeded',
+              to: EMAIL_TO
             cleanWs()
             echo 'Job succeeded!'
-            }
         }
         unstable {
+          emailext
+            attachLog: true, compressLog: true,
+            body: "Build: $BUILD_URL",
+            subject: 'Job $JOB_NAME # $BUILD_NUMBER - I am unstable',
+            to: EMAIL_TO
             echo 'I am unstable :/'
-            cleanWs()
         }
         failure {
-            echo 'I failed :('
-            cleanWs()
+          emailext
+            attachLog: true, compressLog: true,
+            body: "Build: $BUILD_URL",
+            subject: 'Job $JOB_NAME # $BUILD_NUMBER - I failed',
+            to: EMAIL_TO
+          echo 'I failed :('
         }
         changed {
             echo 'Things were different before...'
