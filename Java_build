@@ -47,7 +47,9 @@ environment {
             ${e.getMessage()}""",
             subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
             to: EMAIL_TO
+
             echo 'Things were different before...'
+            
             cleanWs()
         }
         success {
@@ -59,23 +61,11 @@ environment {
             }
         }
         unstable {
-            emailext attachLog: true, compressLog: true,
-            body: "Build: $BUILD_URL
-            Error message:
-            '${currentBuild.result}'
-            '${e.getMessage()}'",
-            subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Unstable",
-            to: EMAIL_TO
+
             echo 'I am unstable :/'
         }
         failure {
-            emailext attachLog: true, compressLog: true,
-            body: "Build: $BUILD_URL
-            Error message:
-            '${currentBuild.result}'
-            '${e.getMessage()}'",
-            subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
-            to: EMAIL_TO
+
             echo 'I failed :('
         }
         changed {
