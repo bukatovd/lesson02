@@ -39,16 +39,6 @@ environment {
 
     post {
         always {
-            emailext attachLog: true, compressLog: true,
-              body: """
-              "Build: ${BUILD_URL}"
-              Error message:
-              "${currentBuild.result}"
-              "${e.getMessage()}"
-              """,
-              subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
-              to: EMAIL_TO
-            echo 'Rigt'
             echo 'I have finished'
             cleanWs()
         }
@@ -57,7 +47,7 @@ environment {
             archive '*.jar'
             archive '*.md5'
             cleanWs()
-            echo 'Job succeeeded!'
+            echo 'Job succeeded!'
             }
         }
         unstable {
