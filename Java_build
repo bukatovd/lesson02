@@ -41,8 +41,6 @@ environment {
         always {
             emailext attachLog: true, compressLog: true,
               body: """
-              Check console output at <a href="${env.BUILD_URL}">${env.JOB_NAME}
-              (${env.BUILD_NUMBER})</a>
               "Build: ${BUILD_URL}"
               Error message:
               "${currentBuild.result}"
@@ -50,8 +48,8 @@ environment {
               """,
               subject: "Job ${env.JOB_NAME} # ${env.BUILD_NUMBER} - Failed",
               to: EMAIL_TO
-
-            echo 'Things were different before...'
+            echo 'Rigt'
+            echo 'I have finished'
             cleanWs()
         }
         success {
@@ -64,9 +62,11 @@ environment {
         }
         unstable {
             echo 'I am unstable :/'
+            cleanWs()
         }
         failure {
             echo 'I failed :('
+            cleanWs()
         }
         changed {
             echo 'Things were different before...'
