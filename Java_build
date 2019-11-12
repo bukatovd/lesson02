@@ -4,10 +4,9 @@ pipeline {
     stages {
         stage('GitHub') {
             steps {
-                cleanWs()
                 git 'https://github.com/kubernetes-client/java.git'
                 }
-            }    
+            }
         stage('Preparation') {
             steps {
                 sh 'mvn archetype:generate -B -X ' +
@@ -16,13 +15,13 @@ pipeline {
                 '-DgroupId=com.company -DartifactId=myproject'
             }
         }
-        
+
         stage('Build') {
             steps {
                 dir ('myproject') {
                 sh 'mvn clean install test'
-                }   
-            } 
+                }
+            }
         }
         stage('Hash') {
             steps {
@@ -31,8 +30,8 @@ pipeline {
                     echo $md5
                     echo $md5 > ./artefact.md5
                     echo $(cat artefact.md5)'''
-                }  
-            } 
+                }
+            }
         }
     }
 
@@ -45,6 +44,18 @@ pipeline {
             dir ('myproject/target') {
             archive '*.jar'
             archive '*.md5'
+            mail subject: "${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed",
+                body: """
+                    Build: ${env.BUILD_URL}
+
+                    Error message:
+                    ${e.getMessage()}
+
+                    Stack Trace:
+                    ${e.getStackTrace().join('\n')}
+                """,
+            to: 'bukatovd@gmail.com'            
+            cleanWs()
             }
         }
         unstable {
@@ -53,13 +64,13 @@ pipeline {
                 body: """
                     Build: ${env.BUILD_URL}
 
-                    Error message: 
+                    Error message:
                     ${e.getMessage()}
 
                     Stack Trace:
                     ${e.getStackTrace().join('\n')}
                 """,
-         to: 'bukatovd@gmail.com'
+            to: 'bukatovd@gmail.com'
         }
         failure {
             echo 'I failed :('
@@ -67,17 +78,17 @@ pipeline {
                 body: """
                     Build: ${env.BUILD_URL}
 
-                    Error message: 
+                    Error message:
                     ${e.getMessage()}
 
                     Stack Trace:
                     ${e.getStackTrace().join('\n')}
                 """,
-         to: 'bukatovd@gmail.com'            
+            to: 'bukatovd@gmail.com'
         }
         changed {
             echo 'Things were different before...'
-            
+
         }
     }
 }
