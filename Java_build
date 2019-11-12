@@ -1,0 +1,82 @@
+pipeline {
+   agent any
+
+    stages {
+        stage('GitHub') {
+            steps {
+                git 'https://github.com/kubernetes-client/java.git'
+                }
+            }    
+        stage('Preparation') {
+            steps {
+                sh 'mvn archetype:generate -B -X ' +
+                '-DarchetypeGroupId=org.apache.maven.archetypes ' +
+                '-DarchetypeArtifactId=maven-archetype-quickstart ' +
+                '-DgroupId=com.company -DartifactId=myproject'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir ('myproject') {
+                sh 'mvn clean install test'
+                }   
+            } 
+        }
+        stage('Hash') {
+            steps {
+                dir ('myproject/target') {
+                    sh label: '', script: '''md5=$(md5sum *.jar | cut -d \' \' -f 1)
+                    echo $md5
+                    echo $md5 > ./artefact.md5
+                    echo $(cat artefact.md5)'''
+                }  
+            } 
+        }
+    }
+
+    post {
+        always {
+            echo 'I have finished and deleting workspace'
+        }
+        success {
+            echo 'Job succeeeded!'
+            dir ('myproject/target') {
+            archive '*.jar'
+            archive '*.md5'
+            }
+        }
+        unstable {
+            echo 'I am unstable :/'
+            mail subject: "${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed",
+                body: """
+                    Build: ${env.BUILD_URL}
+
+                    Error message: 
+                    ${e.getMessage()}
+
+                    Stack Trace:
+                    ${e.getStackTrace().join('\n')}
+                """,
+         to: 'bukatovd@gmail.com'
+        }
+        failure {
+            echo 'I failed :('
+            mail subject: "${env.JOB_NAME}#${env.BUILD_NUMBER} - Failed",
+                body: """
+                    Build: ${env.BUILD_URL}
+
+                    Error message: 
+                    ${e.getMessage()}
+
+                    Stack Trace:
+                    ${e.getStackTrace().join('\n')}
+                """,
+         to: 'bukatovd@gmail.com'            
+        }
+        changed {
+            echo 'Things were different before...'
+            
+        }
+    }
+}
