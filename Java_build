@@ -49,7 +49,7 @@ environment {
             emailext (
               attachLog: true, compressLog: true,
               body: "Build: $BUILD_URL",
-              subject: "Job $JOB_NAME # $BUILD_NUMBER - ${BUILD_STATUS}",
+              subject: "Job $JOB_NAME # $BUILD_NUMBER - $BUILD_STATUS",
               to: EMAIL_TO)
 
             cleanWs()
@@ -67,7 +67,7 @@ environment {
           emailext (
             attachLog: true, compressLog: true,
             body: "Build: $BUILD_URL",
-            subject: "Job $JOB_NAME # $BUILD_NUMBER - ${BUILD_STATUS}",
+            subject: "Job $JOB_NAME # $BUILD_NUMBER - $BUILD_STATUS",
             to: EMAIL_TO)
           echo 'I failed :('
         }
